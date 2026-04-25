@@ -28,12 +28,14 @@ jobs:
   build:
     name: Build YTMusicUltimate
     runs-on: macos-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       contents: write
 
     steps:
       - name: Checkout Main
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6
         with:
           path: main
           submodules: recursive
@@ -64,7 +66,7 @@ jobs:
 
       - name: Cache Theos
         id: theos
-        uses: actions/cache@v5.0.3
+        uses: actions/cache@v5
         env:
           cache-name: theos_cache_344ee59
         with:
@@ -74,7 +76,7 @@ jobs:
 
       - name: Setup Theos
         if: steps.theos.outputs.cache-hit != 'true'
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6
         with:
           repository: theos/theos
           ref: 344ee5925df036dbd1312b783ad5a00d153c2445
@@ -106,11 +108,12 @@ jobs:
         run: cyan -i ytm.ipa -o YTMusicUltimate.ipa -uwsf ytmult.deb -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }} 
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2.5.0
+        uses: softprops/action-gh-release@v2
         with:
           name: YTMusicUltimate (${{ github.run_number }})
           files: YTMusicUltimate.ipa
-          draft: true
+          draft: false
+          make_latest: true
 
       - name: Output Release URL
         run: |
