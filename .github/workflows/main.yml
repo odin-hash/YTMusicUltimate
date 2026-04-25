@@ -108,9 +108,10 @@ jobs:
         run: cyan -i ytm.ipa -o YTMusicUltimate.ipa -uwsf ytmult.deb -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }} 
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
-          name: YTMusicUltimate (${{ github.run_number }})
+          tag_name: build-${{ github.run_number }}
+          name: YTMusicUltimate (Build ${{ github.run_number }})
           files: YTMusicUltimate.ipa
           draft: false
           make_latest: true
